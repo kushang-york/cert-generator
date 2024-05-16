@@ -1,4 +1,4 @@
-# domain_arg=$1
+domain_arg=$1
 
 CONFIG_FOLDER="/var/www/certificates"
 WEBROOT_PATH="/var/www/html"
@@ -29,6 +29,7 @@ create_nginx_conf() {
     local domain=$1
     local conf_file="$NGINX_CONF_DIR/$domain.conf"
     local ssl_block_exists=$(grep -c "listen 443 ssl;" "$conf_file")
+    echo "$domain"
     if [ -f "$conf_file" ]; then
         echo "Updating Nginx configuration for $domain..."
     else
@@ -66,7 +67,8 @@ server {
 EOF
     fi
 # Check for syntax errors
-nginx -t && systemctl reload nginx 
+# nginx -t && systemctl reload nginx
+nginx -t && nginx -s reload
 }
 # Main processing loop for each domain in the file
 
